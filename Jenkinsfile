@@ -17,7 +17,7 @@ pipeline {
         )
     }
     stages {
-        stage('Initialise') {
+        stage('Activate GCP Service Account and Set Project') {
             steps {
                 sh '''
                     echo Setup activator_params
@@ -28,3 +28,21 @@ pipeline {
                 '''
            }
         }
+        stage('Activator Terraform init validate plan') {
+            steps {
+                sh '''
+                    terraform init tf-gcp-bastion
+                    terraform validate tf-gcp-bastion
+                    terraform plan -out bastion-plan tf-gcp-bastion/
+                '''
+           }
+        }
+        stage('Activator Infra Deploy') {
+            steps {
+                sh '''
+                    terraform apply  --auto-approve bastion-plan
+                '''
+           }
+        }
+    }
+}
