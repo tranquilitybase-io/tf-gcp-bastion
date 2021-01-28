@@ -31,10 +31,9 @@ pipeline {
         stage('Activator Terraform init validate plan') {
             steps {
                 sh '''
-                    ls
-                    terraform init tf-gcp-bastion
-                    terraform validate tf-gcp-bastion
-                    terraform plan -out bastion-plan tf-gcp-bastion/
+                    terraform init 
+                    terraform validate 
+                    terraform plan -out bastion-plan 
                 '''
            }
         }
